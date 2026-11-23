@@ -1,9 +1,9 @@
 Veterinary Clinic Appointment & Patient Tracking System
 
-Student Number: YOUR_STUDENT_NUMBER
-Name Surname: YOUR NAME SURNAME
-Course Group: YOUR_GROUP (e.g. 1-A)
-GitHub: https://github.com/YOUR_USERNAME/VetClinicSystem
+Student Number: b211200559
+Name Surname: Kashir Ghani
+Course Group: tek kisi
+GitHub: https://github.com/kashir2002/VetClinicSystem
 
 About the Project
 
