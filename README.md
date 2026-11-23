@@ -2,7 +2,7 @@ Veterinary Clinic Appointment & Patient Tracking System
 
 Student Number: b211200559
 Name Surname: Kashir Ghani
-Course Group: tek kisi
+Course Group: Web Programming
 GitHub: https://github.com/kashir2002/VetClinicSystem
 
 About the Project
