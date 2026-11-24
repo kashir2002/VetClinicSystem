@@ -1,9 +1,11 @@
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VetClinic.Models;
 using VetClinic.Data;
 
+
+[Authorize(Roles = "Admin")]
 public class ServicesController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -14,12 +16,14 @@ public class ServicesController : Controller
     }
 
     // GET: SERVICES
+    [AllowAnonymous]
     public async Task<IActionResult> Index()    
     {
         return View(await _context.Services.ToListAsync());
     }
 
     // GET: SERVICES/Details/5
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
