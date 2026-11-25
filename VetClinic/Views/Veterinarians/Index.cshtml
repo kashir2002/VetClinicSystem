@@ -1,0 +1,45 @@
+@model IEnumerable<Veterinarian>
+@{
+    ViewData["Title"] = "Veterinarians";
+}
+
+<h1>Veterinarians</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p><a asp-action="Create" class="btn btn-primary">Add veterinarian</a></p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full name</th>
+            <th>Phone</th>
+            <th>Specialties</th>
+            <th>Services</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vet in Model)
+        {
+            <tr>
+                <td>@vet.FullName</td>
+                <td>@vet.Phone</td>
+                <td>@string.Join(", ", vet.Specialties.Select(s => s.Name))</td>
+                <td>@string.Join(", ", vet.Services.Select(s => s.Name))</td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@vet.Id">Edit</a> <text>|</text>
+                    }
+                    <a asp-action="Details" asp-route-id="@vet.Id">Details</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <text>|</text> <a asp-action="Delete" asp-route-id="@vet.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

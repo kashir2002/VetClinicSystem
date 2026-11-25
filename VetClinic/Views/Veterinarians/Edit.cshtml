@@ -1,0 +1,20 @@
+@model VeterinarianFormViewModel
+@{
+    ViewData["Title"] = "Edit veterinarian";
+}
+
+<h1>Edit veterinarian</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <partial name="_VeterinarianForm" model="Model" />
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
