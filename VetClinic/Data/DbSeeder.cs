@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using VetClinic.Models;
 
 namespace VetClinic.Data
 {
@@ -7,7 +8,8 @@ namespace VetClinic.Data
         public static async Task SeedRolesAndAdminAsync(IServiceProvider services)
         {
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
 
             // 1. Create the three roles if they don't exist yet
             string[] roles = { "Admin", "Veterinarian", "Member" };
@@ -25,11 +27,12 @@ namespace VetClinic.Data
 
             if (admin == null)
             {
-                admin = new IdentityUser
+                admin = new ApplicationUser
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    FullName = "Admin"
                 };
 
                 var result = await userManager.CreateAsync(admin, "sau");
