@@ -22,5 +22,8 @@ namespace VetClinic.Models
         [Range(0, 100000, ErrorMessage = "Price cannot be negative.")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
+
+        // Navigation: the vets who can perform this service
+        public List<Veterinarian> Veterinarians { get; set; } = new();
     }
 }

@@ -159,6 +159,36 @@ namespace VetClinic.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ServiceVeterinarian", b =>
+                {
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VeterinariansId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServicesId", "VeterinariansId");
+
+                    b.HasIndex("VeterinariansId");
+
+                    b.ToTable("ServiceVeterinarian");
+                });
+
+            modelBuilder.Entity("SpecialtyVeterinarian", b =>
+                {
+                    b.Property<int>("SpecialtiesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VeterinariansId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SpecialtiesId", "VeterinariansId");
+
+                    b.HasIndex("VeterinariansId");
+
+                    b.ToTable("SpecialtyVeterinarian");
+                });
+
             modelBuilder.Entity("VetClinic.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -254,7 +284,52 @@ namespace VetClinic.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("VetClinic.Models.Specialty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialties");
+                });
+
+            modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Veterinarians");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -306,6 +381,45 @@ namespace VetClinic.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ServiceVeterinarian", b =>
+                {
+                    b.HasOne("VetClinic.Models.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Models.Veterinarian", null)
+                        .WithMany()
+                        .HasForeignKey("VeterinariansId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SpecialtyVeterinarian", b =>
+                {
+                    b.HasOne("VetClinic.Models.Specialty", null)
+                        .WithMany()
+                        .HasForeignKey("SpecialtiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Models.Veterinarian", null)
+                        .WithMany()
+                        .HasForeignKey("VeterinariansId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
+                {
+                    b.HasOne("VetClinic.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
