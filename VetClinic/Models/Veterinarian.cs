@@ -22,5 +22,7 @@ namespace VetClinic.Models
         // Many-to-many navigations
         public List<Specialty> Specialties { get; set; } = new();
         public List<Service> Services { get; set; } = new();
+
+        public List<Availability> Availabilities { get; set; } = new();
     }
 }

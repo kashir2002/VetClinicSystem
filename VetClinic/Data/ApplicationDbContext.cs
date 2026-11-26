@@ -14,5 +14,7 @@ namespace VetClinic.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<Veterinarian> Veterinarians { get; set; }
+
+        public DbSet<Availability> Availabilities { get; set; }
     }
 }

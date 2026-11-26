@@ -259,6 +259,33 @@ namespace VetClinic.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("VetClinic.Models.Availability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("VeterinarianId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VeterinarianId");
+
+                    b.ToTable("Availabilities");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -413,6 +440,17 @@ namespace VetClinic.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("VetClinic.Models.Availability", b =>
+                {
+                    b.HasOne("VetClinic.Models.Veterinarian", "Veterinarian")
+                        .WithMany("Availabilities")
+                        .HasForeignKey("VeterinarianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Veterinarian");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
                 {
                     b.HasOne("VetClinic.Models.ApplicationUser", "User")
@@ -420,6 +458,11 @@ namespace VetClinic.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
+                {
+                    b.Navigation("Availabilities");
                 });
 #pragma warning restore 612, 618
         }
