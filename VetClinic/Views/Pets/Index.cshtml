@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Pet>
+@{
+    var isAdmin = User.IsInRole("Admin");
+    ViewData["Title"] = isAdmin ? "All pets" : "My pets";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p><a asp-action="Create" class="btn btn-primary">Add pet</a></p>
+
+@if (!Model.Any())
+{
+    <p>No pets yet. Add your first pet!</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Species</th>
+                <th>Breed</th>
+                <th>Birth date</th>
+                <th>Weight (kg)</th>
+                @if (isAdmin)
+                {
+                    <th>Owner</th>
+                }
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pet in Model)
+            {
+                <tr>
+                    <td>@pet.Name</td>
+                    <td>@pet.Species</td>
+                    <td>@pet.Breed</td>
+                    <td>@pet.BirthDate.ToString("dd.MM.yyyy")</td>
+                    <td>@pet.WeightKg</td>
+                    @if (isAdmin)
+                    {
+                        <td>@pet.Owner?.FullName</td>
+                    }
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@pet.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@pet.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@pet.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

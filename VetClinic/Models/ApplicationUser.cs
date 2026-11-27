@@ -9,5 +9,6 @@ namespace VetClinic.Models
         [StringLength(100)]
         [Display(Name = "Full name")]
         public string FullName { get; set; } = string.Empty;
+         public List<Pet> Pets { get; set; } = new();
     }
 }

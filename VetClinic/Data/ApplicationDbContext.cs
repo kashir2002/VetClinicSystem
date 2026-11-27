@@ -16,5 +16,7 @@ namespace VetClinic.Data
         public DbSet<Veterinarian> Veterinarians { get; set; }
 
         public DbSet<Availability> Availabilities { get; set; }
+
+        public DbSet<Pet> Pets { get; set; }
     }
 }

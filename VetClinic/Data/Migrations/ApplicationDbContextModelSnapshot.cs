@@ -286,6 +286,45 @@ namespace VetClinic.Data.Migrations
                     b.ToTable("Availabilities");
                 });
 
+            modelBuilder.Entity("VetClinic.Models.Pet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Breed")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Species")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("WeightKg")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Pets");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -451,6 +490,17 @@ namespace VetClinic.Data.Migrations
                     b.Navigation("Veterinarian");
                 });
 
+            modelBuilder.Entity("VetClinic.Models.Pet", b =>
+                {
+                    b.HasOne("VetClinic.Models.ApplicationUser", "Owner")
+                        .WithMany("Pets")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
                 {
                     b.HasOne("VetClinic.Models.ApplicationUser", "User")
@@ -458,6 +508,11 @@ namespace VetClinic.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("VetClinic.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Pets");
                 });
 
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
