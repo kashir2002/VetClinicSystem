@@ -43,5 +43,7 @@ namespace VetClinic.Models
             }
         }
         public List<VaccineRecord> VaccineRecords { get; set; } = new();
+
+        public List<Appointment> Appointments { get; set; } = new();
     }
 }

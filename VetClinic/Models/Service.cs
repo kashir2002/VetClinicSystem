@@ -25,5 +25,7 @@ namespace VetClinic.Models
 
         // Navigation: the vets who can perform this service
         public List<Veterinarian> Veterinarians { get; set; } = new();
+
+        public List<Appointment> Appointments { get; set; } = new();
     }
 }

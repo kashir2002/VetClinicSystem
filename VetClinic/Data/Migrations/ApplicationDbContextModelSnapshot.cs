@@ -259,6 +259,53 @@ namespace VetClinic.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("VetClinic.Models.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExamNote")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int>("PetId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VeterinarianId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PetId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("VeterinarianId");
+
+                    b.ToTable("Appointments");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Availability", b =>
                 {
                     b.Property<int>("Id")
@@ -508,6 +555,33 @@ namespace VetClinic.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("VetClinic.Models.Appointment", b =>
+                {
+                    b.HasOne("VetClinic.Models.Pet", "Pet")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Models.Service", "Service")
+                        .WithMany("Appointments")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Models.Veterinarian", "Veterinarian")
+                        .WithMany("Appointments")
+                        .HasForeignKey("VeterinarianId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+
+                    b.Navigation("Service");
+
+                    b.Navigation("Veterinarian");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Availability", b =>
                 {
                     b.HasOne("VetClinic.Models.Veterinarian", "Veterinarian")
@@ -557,11 +631,20 @@ namespace VetClinic.Data.Migrations
 
             modelBuilder.Entity("VetClinic.Models.Pet", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("VaccineRecords");
+                });
+
+            modelBuilder.Entity("VetClinic.Models.Service", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Availabilities");
                 });
 #pragma warning restore 612, 618

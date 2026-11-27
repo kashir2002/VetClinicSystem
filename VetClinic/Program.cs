@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using VetClinic.Business;
 using VetClinic.Data;
 using VetClinic.Models;
-using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +31,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
