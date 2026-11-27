@@ -1,0 +1,20 @@
+﻿@model VaccineRecord
+@{
+    ViewData["Title"] = "Add vaccine record";
+}
+
+<h1>Add vaccine for @ViewData["PetName"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Create">
+            <partial name="_VaccineForm" model="Model" />
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-controller="Pets" asp-action="Details" asp-route-id="@Model.PetId" class="btn btn-secondary">Back to pet</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

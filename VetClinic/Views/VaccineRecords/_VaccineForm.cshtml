@@ -1,0 +1,31 @@
+﻿@model VaccineRecord
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="PetId" />
+
+<div class="mb-3">
+    <label asp-for="VaccineName" class="form-label"></label>
+    <input asp-for="VaccineName" class="form-control" list="vaccine-options" />
+    <datalist id="vaccine-options">
+        <option value="Rabies"></option>
+        <option value="Mixed (DHPP)"></option>
+        <option value="Mixed (FVRCP)"></option>
+        <option value="Leptospirosis"></option>
+        <option value="Internal parasite"></option>
+        <option value="External parasite"></option>
+    </datalist>
+    <span asp-validation-for="VaccineName" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="DateGiven" class="form-label"></label>
+    <input asp-for="DateGiven" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+    <span asp-validation-for="DateGiven" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="NextDoseDate" class="form-label"></label>
+    <input asp-for="NextDoseDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+    <div class="form-text">Leave empty if no further dose is needed.</div>
+    <span asp-validation-for="NextDoseDate" class="text-danger"></span>
+</div>

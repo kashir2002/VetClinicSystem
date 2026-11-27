@@ -1,6 +1,8 @@
 ﻿@model Pet
 @{
     ViewData["Title"] = Model.Name;
+    var today = DateOnly.FromDateTime(DateTime.Today);
+    var canManage = User.IsInRole("Admin") || User.IsInRole("Veterinarian");
 }
 
 <h1>@Model.Name</h1>
@@ -27,3 +29,75 @@
 
 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
 <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+
+<h3 class="mt-5">Vaccinations</h3>
+
+@if (canManage)
+{
+    <a asp-controller="VaccineRecords" asp-action="Create" asp-route-petId="@Model.Id"
+       class="btn btn-sm btn-success mb-3">Add vaccine record</a>
+}
+
+@if (!Model.VaccineRecords.Any())
+{
+    <p>No vaccine records yet.</p>
+}
+else
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Vaccine</th>
+                <th>Date given</th>
+                <th>Next dose</th>
+                <th>Status</th>
+                @if (canManage)
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model.VaccineRecords.OrderByDescending(v => v.DateGiven))
+            {
+                string status;
+                string badge;
+
+                if (v.NextDoseDate == null)
+                {
+                    status = "Completed";
+                    badge = "bg-secondary";
+                }
+                else if (v.NextDoseDate < today)
+                {
+                    status = "Overdue";
+                    badge = "bg-danger";
+                }
+                else if (v.NextDoseDate <= today.AddDays(30))
+                {
+                    status = "Due soon";
+                    badge = "bg-warning text-dark";
+                }
+                else
+                {
+                    status = "Scheduled";
+                    badge = "bg-success";
+                }
+
+                <tr>
+                    <td>@v.VaccineName</td>
+                    <td>@v.DateGiven.ToString("dd.MM.yyyy")</td>
+                    <td>@(v.NextDoseDate?.ToString("dd.MM.yyyy") ?? "—")</td>
+                    <td><span class="badge @badge">@status</span></td>
+                    @if (canManage)
+                    {
+                        <td>
+                            <a asp-controller="VaccineRecords" asp-action="Edit" asp-route-id="@v.Id">Edit</a> |
+                            <a asp-controller="VaccineRecords" asp-action="Delete" asp-route-id="@v.Id">Delete</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}

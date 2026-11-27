@@ -27,7 +27,7 @@ namespace VetClinic.Controllers
         {
             var pets = _context.Pets.Include(p => p.Owner).AsQueryable();
 
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("Veterinarian"))
             {
                 return pets;
             }
@@ -48,7 +48,9 @@ namespace VetClinic.Controllers
         {
             if (id == null) return NotFound();
 
-            var pet = await VisiblePets().FirstOrDefaultAsync(p => p.Id == id);
+            var pet = await VisiblePets()
+                .Include(p => p.VaccineRecords)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (pet == null) return NotFound();
 
             return View(pet);

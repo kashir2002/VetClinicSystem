@@ -38,7 +38,10 @@ namespace VetClinic.Models
                 yield return new ValidationResult(
                     "Birth date cannot be in the future.",
                     new[] { nameof(BirthDate) });
+
+
             }
         }
+        public List<VaccineRecord> VaccineRecords { get; set; } = new();
     }
 }

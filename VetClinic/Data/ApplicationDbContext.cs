@@ -18,5 +18,7 @@ namespace VetClinic.Data
         public DbSet<Availability> Availabilities { get; set; }
 
         public DbSet<Pet> Pets { get; set; }
+
+        public DbSet<VaccineRecord> VaccineRecords { get; set; }
     }
 }

@@ -371,6 +371,35 @@ namespace VetClinic.Data.Migrations
                     b.ToTable("Specialties");
                 });
 
+            modelBuilder.Entity("VetClinic.Models.VaccineRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("DateGiven")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("NextDoseDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("PetId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VaccineName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PetId");
+
+                    b.ToTable("VaccineRecords");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
                 {
                     b.Property<int>("Id")
@@ -501,6 +530,17 @@ namespace VetClinic.Data.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("VetClinic.Models.VaccineRecord", b =>
+                {
+                    b.HasOne("VetClinic.Models.Pet", "Pet")
+                        .WithMany("VaccineRecords")
+                        .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+                });
+
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
                 {
                     b.HasOne("VetClinic.Models.ApplicationUser", "User")
@@ -513,6 +553,11 @@ namespace VetClinic.Data.Migrations
             modelBuilder.Entity("VetClinic.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Pets");
+                });
+
+            modelBuilder.Entity("VetClinic.Models.Pet", b =>
+                {
+                    b.Navigation("VaccineRecords");
                 });
 
             modelBuilder.Entity("VetClinic.Models.Veterinarian", b =>
