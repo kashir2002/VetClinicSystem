@@ -1,0 +1,37 @@
+﻿@model Appointment
+@{
+    ViewData["Title"] = "Appointment details";
+}
+
+<h1>Appointment details</h1>
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">Date</dt>
+    <dd class="col-sm-10">@Model.StartTime.ToString("dddd, dd.MM.yyyy")</dd>
+
+    <dt class="col-sm-2">Time</dt>
+    <dd class="col-sm-10">@Model.StartTime.ToString("HH:mm")–@Model.EndTime.ToString("HH:mm") (@Model.DurationMinutes min)</dd>
+
+    <dt class="col-sm-2">Pet</dt>
+    <dd class="col-sm-10">@Model.Pet?.Name (@Model.Pet?.Species)</dd>
+
+    <dt class="col-sm-2">Owner</dt>
+    <dd class="col-sm-10">@Model.Pet?.Owner?.FullName</dd>
+
+    <dt class="col-sm-2">Service</dt>
+    <dd class="col-sm-10">@Model.Service?.Name</dd>
+
+    <dt class="col-sm-2">Veterinarian</dt>
+    <dd class="col-sm-10">@Model.Veterinarian?.FullName</dd>
+
+    <dt class="col-sm-2">Price</dt>
+    <dd class="col-sm-10">@Model.Price.ToString("0.00") TL</dd>
+
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.Status</dd>
+
+    <dt class="col-sm-2">Exam note</dt>
+    <dd class="col-sm-10">@(Model.ExamNote ?? "—")</dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">Back to list</a>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Appointment>
+@{
+    var isStaff = User.IsInRole("Admin") || User.IsInRole("Veterinarian");
+    ViewData["Title"] = isStaff ? "Appointments" : "My appointments";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["Message"] is string message)
+{
+    var isError = TempData["IsError"] is bool b && b;
+    <div class="alert @(isError ? "alert-danger" : "alert-success")">@message</div>
+}
+
+@if (!isStaff)
+{
+    <p><a asp-action="Create" class="btn btn-primary">Book an appointment</a></p>
+}
+
+@if (!Model.Any())
+{
+    <p>No appointments yet.</p>
+}
+else
+{
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Date & time</th>
+                <th>Pet</th>
+                <th>Service</th>
+                <th>Veterinarian</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                var badge = a.Status switch
+                {
+                    AppointmentStatus.Pending => "bg-warning text-dark",
+                    AppointmentStatus.Approved => "bg-success",
+                    AppointmentStatus.Rejected => "bg-danger",
+                    AppointmentStatus.Completed => "bg-primary",
+                    _ => "bg-secondary"
+                };
+
+                <tr>
+                    <td>@a.StartTime.ToString("dd.MM.yyyy HH:mm")–@a.EndTime.ToString("HH:mm")</td>
+                    <td>
+                        @a.Pet?.Name
+                        @if (isStaff)
+                        {
+                            <small class="text-muted d-block">@a.Pet?.Owner?.FullName</small>
+                        }
+                    </td>
+                    <td>@a.Service?.Name</td>
+                    <td>@a.Veterinarian?.FullName</td>
+                    <td>@a.Price.ToString("0.00") TL</td>
+                    <td><span class="badge @badge">@a.Status</span></td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@a.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                        @if (isStaff && a.Status == AppointmentStatus.Pending)
+                        {
+                            <form asp-action="Approve" asp-route-id="@a.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                            <form asp-action="Reject" asp-route-id="@a.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

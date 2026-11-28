@@ -1,0 +1,92 @@
+﻿@model AppointmentFormViewModel
+@{
+    ViewData["Title"] = "Book an appointment";
+}
+
+<h1>Book an appointment</h1>
+<hr />
+
+@if (!Model.Pets.Any())
+{
+    <div class="alert alert-info">
+        You need to add a pet before booking.
+        <a asp-controller="Pets" asp-action="Create">Add a pet</a>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-5">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="PetId" class="form-label"></label>
+                    <select asp-for="PetId" asp-items="Model.Pets" class="form-select">
+                        <option value="">-- Select a pet --</option>
+                    </select>
+                    <span asp-validation-for="PetId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ServiceId" class="form-label"></label>
+                    <select asp-for="ServiceId" asp-items="Model.Services" class="form-select">
+                        <option value="">-- Select a service --</option>
+                    </select>
+                    <span asp-validation-for="ServiceId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="VeterinarianId" class="form-label"></label>
+                    <select asp-for="VeterinarianId" asp-items="@(new SelectList(Model.Vets, "Id", "FullName"))" class="form-select">
+                        <option value="">-- Select a veterinarian --</option>
+                    </select>
+                    <span asp-validation-for="VeterinarianId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Date" class="form-label"></label>
+                    <input asp-for="Date" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Time" class="form-label"></label>
+                    <input asp-for="Time" type="time" step="900" asp-format="{0:HH:mm}" class="form-control" />
+                    <span asp-validation-for="Time" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Request appointment</button>
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+
+        <div class="col-md-7">
+            <h5>Our veterinarians</h5>
+            @foreach (var vet in Model.Vets)
+            {
+                <div class="card mb-2">
+                    <div class="card-body py-2">
+                        <h6 class="card-title mb-1">@vet.FullName</h6>
+                        <small class="d-block">
+                            <strong>Services:</strong>
+                            @(vet.Services.Any() ? string.Join(", ", vet.Services.Select(s => s.Name)) : "—")
+                        </small>
+                        <small class="d-block">
+                            <strong>Hours:</strong>
+                            @(vet.Availabilities.Any()
+                                ? string.Join(" · ", vet.Availabilities
+                                    .OrderBy(a => a.DayOfWeek).ThenBy(a => a.StartTime)
+                                    .Select(a => $"{a.DayOfWeek} {a.StartTime:HH:mm}–{a.EndTime:HH:mm}"))
+                                : "No hours set")
+                        </small>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
